@@ -109,6 +109,10 @@
                 }
             }
 
+            // Initialize lightbox and info buttons (not handled by base slider for coverflow)
+            self.initLightbox($slider);
+            self.initInfoButton($slider);
+
             // Mark as initialized
             $slider.data('tpf-pro-initialized', true);
         },
@@ -237,6 +241,83 @@
                 clearInterval(interval);
                 $slider.data('coverflow-autoplay', null);
             }
+        },
+
+        /**
+         * Initialize lightbox for coverflow
+         */
+        initLightbox: function($slider) {
+            var self = this;
+            var $lightbox = $slider.find('.tpf-lightbox');
+            var $lightboxImage = $lightbox.find('.tpf-lightbox-image');
+            var $closeBtn = $lightbox.find('.tpf-lightbox-close');
+
+            // Move lightbox to body to escape any stacking contexts
+            $lightbox.appendTo('body');
+
+            // Open lightbox when enlarge button clicked
+            $slider.find('.tpf-enlarge-btn').on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var imageUrl = $(this).data('image');
+                $lightboxImage.attr('src', imageUrl);
+                $lightbox.addClass('active');
+                self.stopAutoplay($slider);
+            });
+
+            // Close lightbox
+            $closeBtn.on('click', function(e) {
+                e.preventDefault();
+                $lightbox.removeClass('active');
+                if ($slider.data('autoplay') === true || $slider.data('autoplay') === 'true') {
+                    self.startAutoplay($slider);
+                }
+            });
+
+            // Close on background click
+            $lightbox.on('click', function(e) {
+                if (e.target === this) {
+                    $lightbox.removeClass('active');
+                    if ($slider.data('autoplay') === true || $slider.data('autoplay') === 'true') {
+                        self.startAutoplay($slider);
+                    }
+                }
+            });
+
+            // Close on escape key
+            $(document).on('keydown', function(e) {
+                if (e.key === 'Escape' && $lightbox.hasClass('active')) {
+                    $lightbox.removeClass('active');
+                    if ($slider.data('autoplay') === true || $slider.data('autoplay') === 'true') {
+                        self.startAutoplay($slider);
+                    }
+                }
+            });
+        },
+
+        /**
+         * Initialize info button for coverflow
+         */
+        initInfoButton: function($slider) {
+            var self = this;
+
+            // Toggle info overlay on info button click
+            $slider.on('click', '.tpf-info-btn', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var $slide = $(this).closest('.tpf-slide');
+                var isActive = $slide.hasClass('tpf-info-active');
+
+                $slide.toggleClass('tpf-info-active');
+                $(this).toggleClass('active');
+
+                // Pause autoplay when info is shown, resume when hidden
+                if (!isActive) {
+                    self.stopAutoplay($slider);
+                } else if ($slider.data('autoplay') === true || $slider.data('autoplay') === 'true') {
+                    self.startAutoplay($slider);
+                }
+            });
         }
     };
 
