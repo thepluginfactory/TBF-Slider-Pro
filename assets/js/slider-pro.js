@@ -29,16 +29,17 @@
          */
         initCoverflow: function($slider) {
             var self = this;
+
+            // On mobile, just change to slide transition and let base slider handle it
+            if (self.isMobile()) {
+                $slider.attr('data-transition', 'slide');
+                return;
+            }
+
             var $slides = $slider.find('.tpf-slide:not(.tpf-clone)');
             var slideCount = $slides.length;
 
             if (slideCount === 0) return;
-
-            // On mobile, use simplified slide-style navigation
-            if (self.isMobile()) {
-                self.initMobileCoverflow($slider, $slides, slideCount);
-                return;
-            }
 
             // Store slider data
             $slider.data('coverflow-index', 0);
@@ -250,121 +251,24 @@
                 clearInterval(interval);
                 $slider.data('coverflow-autoplay', null);
             }
-        },
-
-        /**
-         * Initialize mobile coverflow - uses simple slide transition
-         */
-        initMobileCoverflow: function($slider, $slides, slideCount) {
-            var self = this;
-            var currentIndex = 0;
-            var isAnimating = false;
-
-            // Remove any coverflow classes, use active/prev like standard slider
-            $slides.removeClass('coverflow-center coverflow-left-1 coverflow-right-1 coverflow-queue-left coverflow-queue-right');
-
-            // Set first slide as active
-            $slides.eq(0).addClass('active');
-
-            // Store data
-            $slider.data('mobile-index', 0);
-            $slider.data('mobile-count', slideCount);
-
-            // Navigation function
-            function goToSlide(index, direction) {
-                if (isAnimating) return;
-                isAnimating = true;
-
-                var $currentSlide = $slides.filter('.active');
-                var $nextSlide = $slides.eq(index);
-
-                // Add prev class for slide-out animation
-                if (direction === 'next') {
-                    $currentSlide.addClass('prev');
-                }
-
-                // Switch active
-                $currentSlide.removeClass('active');
-                $nextSlide.addClass('active');
-
-                // Update dots
-                $slider.find('.tpf-dot').removeClass('active').eq(index).addClass('active');
-
-                // Reset after animation
-                setTimeout(function() {
-                    $slides.removeClass('prev');
-                    isAnimating = false;
-                }, 600);
-
-                $slider.data('mobile-index', index);
-            }
-
-            // Arrow handlers
-            $slider.find('.tpf-arrow').off('click').on('click', function(e) {
-                e.preventDefault();
-                var idx = $slider.data('mobile-index');
-                var count = $slider.data('mobile-count');
-
-                if ($(this).hasClass('tpf-arrow-next')) {
-                    goToSlide((idx + 1) % count, 'next');
-                } else {
-                    goToSlide((idx - 1 + count) % count, 'prev');
-                }
-            });
-
-            // Dot handlers
-            $slider.find('.tpf-dot').off('click').on('click', function(e) {
-                e.preventDefault();
-                var idx = $(this).data('index');
-                var currentIdx = $slider.data('mobile-index');
-                if (idx !== currentIdx) {
-                    goToSlide(idx, idx > currentIdx ? 'next' : 'prev');
-                }
-            });
-
-            // Touch/swipe
-            var touchStartX = 0;
-            $slider.off('touchstart.mobilecoverflow touchend.mobilecoverflow')
-                .on('touchstart.mobilecoverflow', function(e) {
-                    touchStartX = e.originalEvent.touches[0].clientX;
-                })
-                .on('touchend.mobilecoverflow', function(e) {
-                    var touchEndX = e.originalEvent.changedTouches[0].clientX;
-                    var diff = touchStartX - touchEndX;
-                    if (Math.abs(diff) > 50) {
-                        var idx = $slider.data('mobile-index');
-                        var count = $slider.data('mobile-count');
-                        if (diff > 0) {
-                            goToSlide((idx + 1) % count, 'next');
-                        } else {
-                            goToSlide((idx - 1 + count) % count, 'prev');
-                        }
-                    }
-                });
-
-            // Autoplay
-            if ($slider.data('autoplay') === true || $slider.data('autoplay') === 'true') {
-                var speed = parseInt($slider.data('autoplay-speed'), 10) || 5000;
-                setInterval(function() {
-                    if (!isAnimating) {
-                        var idx = $slider.data('mobile-index');
-                        var count = $slider.data('mobile-count');
-                        goToSlide((idx + 1) % count, 'next');
-                    }
-                }, speed);
-            }
-
-            // Mark as initialized - CSS uses this to enable transitions
-            $slider.attr('data-mobile-init', 'true');
-            $slider.data('tpf-pro-initialized', true);
         }
     };
 
     // Initialize on document ready
     $(document).ready(function() {
-        // Small delay to ensure base slider has initialized
+        // Small delay to ensure DOM is fully ready
         setTimeout(function() {
-            TPFSliderPro.init();
+            if (window.innerWidth <= 768) {
+                // On mobile: change 3D transitions to slide and trigger base slider
+                $('.tpf-slider[data-transition="coverflow"], .tpf-slider[data-transition="flip"], .tpf-slider[data-transition="cube"]').each(function() {
+                    $(this).attr('data-transition', 'slide');
+                    // Trigger base slider to initialize this slider
+                    $(document).trigger('tpf-slider-init');
+                });
+            } else {
+                // On desktop: use full 3D coverflow
+                TPFSliderPro.init();
+            }
         }, 100);
     });
 
