@@ -30,74 +30,68 @@
     width: 45%;
     height: 100%;
     transform-style: preserve-3d;
-    transition: transform 0.5s ease, opacity 0.5s ease, z-index 0s;
+    transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.6s ease, width 0.6s ease;
     backface-visibility: hidden;
+    will-change: transform, opacity;
     opacity: 0;
     visibility: hidden;
-    /* Default hidden state */
-    transform: translateX(-50%) scale(0.4) rotateY(0deg);
+    /* Default hidden state - centered */
+    transform: translateX(-50%) scale(0.6);
+}
+
+/* Slides waiting on the left (will enter from left) */
+.tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-queue-left {
+    width: 35%;
+    transform: translateX(-220%) scale(0.7) rotateY(45deg);
+    opacity: 0;
+    visibility: visible;
+}
+
+/* Slides waiting on the right (will enter from right) */
+.tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-queue-right {
+    width: 35%;
+    transform: translateX(120%) scale(0.7) rotateY(-45deg);
+    opacity: 0;
+    visibility: visible;
 }
 
 /* Active/center slide */
 .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-center {
-    transform: translateX(-50%) scale(1) rotateY(0deg) translateZ(0);
+    transform: translateX(-50%) scale(1) translateZ(0);
     opacity: 1;
     visibility: visible;
-    z-index: 10;
+    z-index: 100;
 }
 
-/* One position to the left */
+/* One position to the left - only immediate neighbor shown */
 .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-left-1 {
-    transform: translateX(-130%) scale(0.75) rotateY(45deg) translateZ(-150px);
-    opacity: 1;
+    width: 35%;
+    transform: translateX(-145%) scale(0.8) rotateY(35deg);
+    opacity: 0.75;
     visibility: visible;
-    z-index: 8;
+    z-index: 5;
 }
 
-/* Two positions to the left */
-.tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-left-2 {
-    transform: translateX(-180%) scale(0.55) rotateY(55deg) translateZ(-250px);
-    opacity: 0.6;
-    visibility: visible;
-    z-index: 6;
-}
-
-/* Three positions to the left */
-.tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-left-3 {
-    transform: translateX(-210%) scale(0.4) rotateY(60deg) translateZ(-350px);
-    opacity: 0.3;
-    visibility: visible;
-    z-index: 4;
-}
-
-/* One position to the right */
+/* One position to the right - only immediate neighbor shown */
 .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-right-1 {
-    transform: translateX(30%) scale(0.75) rotateY(-45deg) translateZ(-150px);
-    opacity: 1;
+    width: 35%;
+    transform: translateX(45%) scale(0.8) rotateY(-35deg);
+    opacity: 0.75;
     visibility: visible;
-    z-index: 8;
+    z-index: 5;
 }
 
-/* Two positions to the right */
-.tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-right-2 {
-    transform: translateX(80%) scale(0.55) rotateY(-55deg) translateZ(-250px);
-    opacity: 0.6;
-    visibility: visible;
-    z-index: 6;
-}
-
-/* Three positions to the right */
-.tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-right-3 {
-    transform: translateX(110%) scale(0.4) rotateY(-60deg) translateZ(-350px);
-    opacity: 0.3;
-    visibility: visible;
-    z-index: 4;
-}
-
-/* Hide text overlay on non-center slides */
-.tpf-slider[data-transition="coverflow"] .tpf-slide:not(.coverflow-center) .tpf-slide-content {
+/* Text overlay on coverflow - fade only, no slide movement */
+.tpf-slider[data-transition="coverflow"] .tpf-slide .tpf-slide-content {
+    transform: translateY(0) !important;
     opacity: 0;
     transition: opacity 0.3s ease;
+}
+
+/* Fade in text overlay on center slide after it settles */
+.tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-center .tpf-slide-content {
+    opacity: 1;
+    transition: opacity 0.4s ease 0.35s;
 }
 
 /* Hide enlarge button on non-center slides */

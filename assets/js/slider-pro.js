@@ -53,14 +53,17 @@
 
                 var currentIndex = $slider.data('coverflow-index');
                 var count = $slider.data('coverflow-count');
+                var direction;
 
                 if ($(this).hasClass('tpf-arrow-next')) {
                     currentIndex = (currentIndex + 1) % count;
+                    direction = 'next';
                 } else {
                     currentIndex = (currentIndex - 1 + count) % count;
+                    direction = 'prev';
                 }
 
-                self.goToSlide($slider, currentIndex);
+                self.goToSlide($slider, currentIndex, direction);
             });
 
             // Override dot click handlers
@@ -108,60 +111,84 @@
         /**
          * Navigate to a specific slide
          */
-        goToSlide: function($slider, index) {
+        goToSlide: function($slider, index, direction) {
             var self = this;
+            var oldIndex = $slider.data('coverflow-index') || 0;
+
+            // Determine direction if not provided
+            if (!direction) {
+                direction = index > oldIndex ? 'next' : 'prev';
+            }
 
             $slider.data('coverflow-animating', true);
             $slider.data('coverflow-index', index);
 
-            self.updateCoverflowPositions($slider);
+            self.updateCoverflowPositions($slider, direction);
             self.updateDots($slider, index);
 
             // Reset animating flag after transition
             setTimeout(function() {
                 $slider.data('coverflow-animating', false);
-            }, 550);
+            }, 650);
         },
 
         /**
          * Update all slide positions based on current index
+         * Only shows immediate left/right neighbors, seamless loop
          */
-        updateCoverflowPositions: function($slider) {
+        updateCoverflowPositions: function($slider, direction) {
             var $slides = $slider.find('.tpf-slide:not(.tpf-clone)');
             var currentIndex = $slider.data('coverflow-index') || 0;
             var count = $slides.length;
-
-            // Remove all position classes
-            $slides.removeClass('coverflow-center coverflow-left-1 coverflow-left-2 coverflow-left-3 coverflow-right-1 coverflow-right-2 coverflow-right-3 active');
 
             $slides.each(function(index) {
                 var $slide = $(this);
                 var position = index - currentIndex;
 
-                // Handle wrapping for infinite feel
+                // Handle wrapping for seamless loop
+                // If position is more than half the slides away, wrap around
                 if (position > count / 2) {
                     position -= count;
                 } else if (position < -count / 2) {
                     position += count;
                 }
 
-                // Apply position class
-                if (position === 0) {
+                // Determine what this slide's new role will be
+                var isCenter = (position === 0);
+                var isLeft = (position === -1);
+                var isRight = (position === 1);
+                var wasVisible = $slide.hasClass('coverflow-center') ||
+                                 $slide.hasClass('coverflow-left-1') ||
+                                 $slide.hasClass('coverflow-right-1');
+
+                // Remove current position classes
+                $slide.removeClass('coverflow-center coverflow-left-1 coverflow-right-1 active coverflow-queue-left coverflow-queue-right');
+
+                if (isCenter) {
                     $slide.addClass('coverflow-center active');
-                } else if (position === -1) {
+                } else if (isLeft) {
+                    // If entering from hidden, pre-position on left
+                    if (!wasVisible && direction) {
+                        $slide.addClass('coverflow-queue-left');
+                        $slide[0].offsetHeight; // Force reflow
+                        $slide.removeClass('coverflow-queue-left');
+                    }
                     $slide.addClass('coverflow-left-1');
-                } else if (position === -2) {
-                    $slide.addClass('coverflow-left-2');
-                } else if (position === -3) {
-                    $slide.addClass('coverflow-left-3');
-                } else if (position === 1) {
+                } else if (isRight) {
+                    // If entering from hidden, pre-position on right
+                    if (!wasVisible && direction) {
+                        $slide.addClass('coverflow-queue-right');
+                        $slide[0].offsetHeight; // Force reflow
+                        $slide.removeClass('coverflow-queue-right');
+                    }
                     $slide.addClass('coverflow-right-1');
-                } else if (position === 2) {
-                    $slide.addClass('coverflow-right-2');
-                } else if (position === 3) {
-                    $slide.addClass('coverflow-right-3');
                 }
-                // Slides further than 3 positions stay hidden (default CSS)
+                // Queue positions for slides not currently visible
+                else if (position < 0) {
+                    $slide.addClass('coverflow-queue-left');
+                } else {
+                    $slide.addClass('coverflow-queue-right');
+                }
             });
         },
 
