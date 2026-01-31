@@ -11,31 +11,17 @@
         init: function() {
             var self = this;
 
-            // Initialize coverflow sliders
+            // Initialize coverflow sliders (desktop only - mobile handled separately)
             $('.tpf-slider[data-transition="coverflow"]').each(function() {
                 self.initCoverflow($(this));
             });
         },
 
         /**
-         * Check if we're on mobile
-         */
-        isMobile: function() {
-            return window.innerWidth <= 768;
-        },
-
-        /**
-         * Initialize coverflow effect for a slider
+         * Initialize coverflow effect for a slider (desktop only)
          */
         initCoverflow: function($slider) {
             var self = this;
-
-            // On mobile, just change to slide transition and let base slider handle it
-            if (self.isMobile()) {
-                $slider.attr('data-transition', 'slide');
-                return;
-            }
-
             var $slides = $slider.find('.tpf-slide:not(.tpf-clone)');
             var slideCount = $slides.length;
 
