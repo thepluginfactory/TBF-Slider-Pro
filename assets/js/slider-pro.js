@@ -18,10 +18,23 @@
         },
 
         /**
+         * Check if we're on mobile
+         */
+        isMobile: function() {
+            return window.innerWidth <= 768;
+        },
+
+        /**
          * Initialize coverflow effect for a slider
          */
         initCoverflow: function($slider) {
             var self = this;
+
+            // Skip coverflow on mobile - let base slider.js handle it as standard slider
+            if (self.isMobile()) {
+                return;
+            }
+
             var $slides = $slider.find('.tpf-slide:not(.tpf-clone)');
             var slideCount = $slides.length;
 
