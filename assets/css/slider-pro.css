@@ -100,6 +100,11 @@
     transition: opacity 0.4s ease 0.35s;
 }
 
+/* Show enlarge button on center slide */
+.tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-center .tpf-enlarge-btn {
+    opacity: 1;
+}
+
 /* Hide enlarge button on non-center slides */
 .tpf-slider[data-transition="coverflow"] .tpf-slide:not(.coverflow-center) .tpf-enlarge-btn {
     opacity: 0 !important;
