@@ -194,3 +194,98 @@
     border-radius: 3px;
     margin-left: 8px;
 }
+
+/* ==========================================================================
+   Mobile Responsive - Disable 3D effects on mobile
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    /* Coverflow fallback to standard fade slider on mobile */
+    .tpf-slider[data-transition="coverflow"] {
+        perspective: none;
+        overflow: visible;
+    }
+
+    .tpf-slider[data-transition="coverflow"] .tpf-slider-wrapper {
+        transform-style: flat;
+        display: block !important;
+    }
+
+    /* Reset all slides to standard positioning */
+    .tpf-slider[data-transition="coverflow"] .tpf-slide {
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transform: none;
+        opacity: 0;
+        visibility: hidden;
+        box-shadow: none;
+    }
+
+    /* Override all coverflow position classes */
+    .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-center,
+    .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-left-1,
+    .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-right-1,
+    .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-queue-left,
+    .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-queue-right {
+        transform: none;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 1;
+    }
+
+    /* Only show the center/active slide */
+    .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-center {
+        opacity: 1;
+        visibility: visible;
+        z-index: 2;
+    }
+
+    /* Show text overlay on mobile */
+    .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-center .tpf-slide-content {
+        opacity: 1;
+        transition: none;
+    }
+
+    /* Arrows inside on mobile - half on half off doesn't work well on small screens */
+    .tpf-slider[data-transition="coverflow"] .tpf-arrow-prev {
+        left: 10px;
+    }
+
+    .tpf-slider[data-transition="coverflow"] .tpf-arrow-next {
+        right: 10px;
+    }
+
+    /* Flip effect - disable 3D on mobile */
+    .tpf-slider[data-transition="flip"] {
+        perspective: none;
+    }
+
+    .tpf-slider[data-transition="flip"] .tpf-slide {
+        transform: none;
+        opacity: 0;
+    }
+
+    .tpf-slider[data-transition="flip"] .tpf-slide.active {
+        transform: none;
+        opacity: 1;
+    }
+
+    /* Cube effect - disable 3D on mobile */
+    .tpf-slider[data-transition="cube"] {
+        perspective: none;
+        overflow: visible;
+    }
+
+    .tpf-slider[data-transition="cube"] .tpf-slide {
+        transform: none;
+        opacity: 0;
+    }
+
+    .tpf-slider[data-transition="cube"] .tpf-slide.active {
+        transform: none;
+        opacity: 1;
+    }
+}
