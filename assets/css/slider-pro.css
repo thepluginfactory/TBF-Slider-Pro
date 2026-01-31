@@ -205,12 +205,14 @@
 }
 
 /* ==========================================================================
-   Mobile Responsive - 3D effects fall back to slide transition
+   Mobile Responsive - 3D effects use standard slide transition
    ========================================================================== */
 
 @media (max-width: 768px) {
-    /* Coverflow fallback to slide transition on mobile */
-    .tpf-slider[data-transition="coverflow"] {
+    /* All 3D effects: reset to standard slider behavior */
+    .tpf-slider[data-transition="coverflow"],
+    .tpf-slider[data-transition="flip"],
+    .tpf-slider[data-transition="cube"] {
         perspective: none;
         overflow: hidden;
     }
@@ -220,21 +222,22 @@
         display: block !important;
     }
 
-    /* Reset all slides to slide transition positioning */
+    /* Coverflow: reset slides to standard positioning */
     .tpf-slider[data-transition="coverflow"] .tpf-slide {
         position: absolute !important;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
+        box-shadow: none;
+        /* Use same transition as standard slide */
         transform: translateX(100%);
         opacity: 1;
         visibility: hidden;
-        box-shadow: none;
-        transition: transform 0.6s ease, visibility 0.6s;
+        transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s;
     }
 
-    /* Override all coverflow position classes for slide behavior */
+    /* Reset all coverflow classes */
     .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-center,
     .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-left-1,
     .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-right-1,
@@ -246,70 +249,28 @@
         z-index: 1;
     }
 
-    /* Active/center slide - visible and centered */
+    /* Center slide = active slide */
     .tpf-slider[data-transition="coverflow"] .tpf-slide.coverflow-center {
         transform: translateX(0);
         visibility: visible;
         z-index: 2;
     }
 
-    /* Previous slide position (for swipe left animation) */
-    .tpf-slider[data-transition="coverflow"] .tpf-slide.prev {
-        transform: translateX(-100%);
-    }
-
-    /* Show text overlay on mobile - hidden until info clicked */
-    .tpf-slider[data-transition="coverflow"] .tpf-slide .tpf-slide-content {
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0s 0.3s;
-    }
-
-    .tpf-slider[data-transition="coverflow"] .tpf-slide.tpf-info-active .tpf-slide-content {
-        opacity: 1;
-        visibility: visible;
-        transition: opacity 0.3s ease, visibility 0s 0s;
-    }
-
-    /* Flip effect - fallback to slide transition on mobile */
-    .tpf-slider[data-transition="flip"] {
-        perspective: none;
-    }
-
-    .tpf-slider[data-transition="flip"] .tpf-slide {
-        transform: translateX(100%);
-        opacity: 1;
-        visibility: hidden;
-        transition: transform 0.6s ease, visibility 0.6s;
-    }
-
-    .tpf-slider[data-transition="flip"] .tpf-slide.active {
-        transform: translateX(0);
-        visibility: visible;
-    }
-
-    .tpf-slider[data-transition="flip"] .tpf-slide.prev {
-        transform: translateX(-100%);
-    }
-
-    /* Cube effect - fallback to slide transition on mobile */
-    .tpf-slider[data-transition="cube"] {
-        perspective: none;
-        overflow: hidden;
-    }
-
+    /* Flip and Cube: use standard slide transition */
+    .tpf-slider[data-transition="flip"] .tpf-slide,
     .tpf-slider[data-transition="cube"] .tpf-slide {
         transform: translateX(100%);
         opacity: 1;
         visibility: hidden;
-        transition: transform 0.6s ease, visibility 0.6s;
     }
 
+    .tpf-slider[data-transition="flip"] .tpf-slide.active,
     .tpf-slider[data-transition="cube"] .tpf-slide.active {
         transform: translateX(0);
         visibility: visible;
     }
 
+    .tpf-slider[data-transition="flip"] .tpf-slide.prev,
     .tpf-slider[data-transition="cube"] .tpf-slide.prev {
         transform: translateX(-100%);
     }
