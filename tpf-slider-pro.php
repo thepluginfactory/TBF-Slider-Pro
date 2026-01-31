@@ -3,13 +3,12 @@
  * Plugin Name: TPF Slider Pro
  * Plugin URI: https://thepluginfactory.com/tpf-slider-pro/
  * Description: Pro add-on for TPF Starter Slider. Adds unlimited sliders, 3D coverflow effect, advanced transitions, and text color options.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: The Plugin Factory
  * Author URI: https://thepluginfactory.com
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: tpf-slider-pro
- * Requires Plugins: tpf-starter-slider
  */
 
 // Prevent direct access
@@ -18,7 +17,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants
-define('TPF_SLIDER_PRO_VERSION', '1.1.0');
+define('TPF_SLIDER_PRO_VERSION', '1.1.1');
 define('TPF_SLIDER_PRO_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('TPF_SLIDER_PRO_PLUGIN_URL', plugin_dir_url(__FILE__));
 
