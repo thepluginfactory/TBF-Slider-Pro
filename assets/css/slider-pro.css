@@ -1,0 +1,128 @@
+/**
+ * TPF Slider Pro - Frontend Styles
+ * 3D Effects and Pro Features
+ */
+
+/* ==========================================================================
+   3D Coverflow Effect
+   ========================================================================== */
+
+.tpf-slider[data-transition="coverflow"] {
+    perspective: 1000px;
+    overflow: visible;
+}
+
+.tpf-slider[data-transition="coverflow"] .tpf-slider-wrapper {
+    transform-style: preserve-3d;
+}
+
+.tpf-slider[data-transition="coverflow"] .tpf-slide {
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease, opacity 0.6s ease;
+    backface-visibility: hidden;
+}
+
+/* Coverflow for carousel mode */
+.tpf-slider.tpf-carousel[data-transition="coverflow"] .tpf-slide {
+    transform: rotateY(0deg) scale(0.85);
+    opacity: 0.6;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.tpf-slider.tpf-carousel[data-transition="coverflow"] .tpf-slide:hover {
+    transform: rotateY(0deg) scale(0.9);
+    opacity: 0.8;
+}
+
+/* Active slide in coverflow */
+.tpf-slider.tpf-carousel[data-transition="coverflow"] .tpf-slide.tpf-coverflow-active {
+    transform: rotateY(0deg) scale(1);
+    opacity: 1;
+    z-index: 10;
+}
+
+/* Left side slides */
+.tpf-slider.tpf-carousel[data-transition="coverflow"] .tpf-slide.tpf-coverflow-left {
+    transform: rotateY(25deg) scale(0.85) translateX(-10%);
+    opacity: 0.7;
+}
+
+/* Right side slides */
+.tpf-slider.tpf-carousel[data-transition="coverflow"] .tpf-slide.tpf-coverflow-right {
+    transform: rotateY(-25deg) scale(0.85) translateX(10%);
+    opacity: 0.7;
+}
+
+/* ==========================================================================
+   3D Flip Effect
+   ========================================================================== */
+
+.tpf-slider[data-transition="flip"] {
+    perspective: 1200px;
+}
+
+.tpf-slider[data-transition="flip"] .tpf-slider-wrapper {
+    transform-style: preserve-3d;
+}
+
+.tpf-slider[data-transition="flip"] .tpf-slide {
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+    opacity: 0;
+}
+
+.tpf-slider[data-transition="flip"] .tpf-slide.active {
+    transform: rotateY(0deg);
+    opacity: 1;
+}
+
+.tpf-slider[data-transition="flip"] .tpf-slide.prev {
+    transform: rotateY(-180deg);
+}
+
+/* ==========================================================================
+   3D Cube Effect
+   ========================================================================== */
+
+.tpf-slider[data-transition="cube"] {
+    perspective: 1200px;
+    overflow: visible;
+}
+
+.tpf-slider[data-transition="cube"] .tpf-slider-wrapper {
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+}
+
+.tpf-slider[data-transition="cube"] .tpf-slide {
+    backface-visibility: hidden;
+    transform: rotateY(90deg) translateZ(var(--slider-height, 250px));
+    opacity: 0;
+}
+
+.tpf-slider[data-transition="cube"] .tpf-slide.active {
+    transform: rotateY(0deg) translateZ(0);
+    opacity: 1;
+}
+
+.tpf-slider[data-transition="cube"] .tpf-slide.prev {
+    transform: rotateY(-90deg) translateZ(var(--slider-height, 250px));
+}
+
+/* ==========================================================================
+   Pro Badge
+   ========================================================================== */
+
+.tpf-pro-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    background: linear-gradient(135deg, #f0b849, #e09b2d);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 3px;
+    margin-left: 8px;
+}

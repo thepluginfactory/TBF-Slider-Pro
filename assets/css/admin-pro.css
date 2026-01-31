@@ -1,0 +1,60 @@
+/**
+ * TPF Slider Pro - Admin Styles
+ */
+
+/* Pro Settings Section */
+.tpf-pro-settings th[colspan="2"] {
+    color: #1d2327;
+    font-size: 14px;
+}
+
+.tpf-pro-settings th[colspan="2"] .dashicons {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+/* Color Picker Inputs */
+input[type="color"] {
+    width: 50px;
+    height: 34px;
+    padding: 2px;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+input[type="color"]:hover {
+    border-color: #2271b1;
+}
+
+/* Pro Badge in Menu */
+.tpf-pro-menu-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    background: linear-gradient(135deg, #f0b849, #e09b2d);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 3px;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+/* Transition Option with Pro Badge */
+.tpf-transition-pro {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tpf-transition-pro .tpf-pro-tag {
+    display: inline-block;
+    padding: 1px 5px;
+    background: #f0b849;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 600;
+    border-radius: 2px;
+}
