@@ -37,8 +37,15 @@
     will-change: transform, opacity;
     opacity: 0;
     visibility: hidden;
+    overflow: hidden;
+    border-radius: var(--border-radius, 0);
     /* Default hidden state - centered */
     transform: translateX(-50%) scale(0.5);
+}
+
+/* Ensure slide image also respects border radius */
+.tpf-slider[data-transition="coverflow"] .tpf-slide .tpf-slide-image {
+    border-radius: var(--border-radius, 0);
 }
 
 /* Slides waiting on the left (will enter from left) */
